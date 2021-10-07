@@ -1,0 +1,35 @@
+{
+  "name": "@vendor/packagename",
+  "version": "0.0.1",
+  "description": "Description of NPM package here.",
+  "main": "build/js/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Danielvandervelden/npm-package-template"
+  },
+  "scripts": {
+    "test": "mocha -r ts-node/register 'tests/**/*.ts'",
+    "server": "ln -sf $INIT_CWD/build/ view/ && http-server view/",
+    "watch-ts": "rm $INIT_CWD/build/js/*.js && tsc --watch",
+    "watch-scss": "sass --watch $INIT_CWD/src/scss/:build/css",
+    "build": "npm run test && tsc && postcss build/css/*.css --use autoprefixer -d build/css",
+    "pub": "npm run build && npm publish --access public"
+  },
+  "author": "Daniel van der Velden",
+  "license": "MIT",
+  "dependencies": {
+    "autoprefixer": "^10.3.7",
+    "http-server": "^13.0.2",
+    "postcss-cli": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0",
+    "chai": "^4.3.4",
+    "mocha": "^9.1.2",
+    "ts-node": "^10.2.1"
+  }
+}

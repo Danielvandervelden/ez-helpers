@@ -24,7 +24,6 @@
     "@types/chai": "^4.2.22",
     "@types/jsdom": "^16.2.13",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.10.3",
     "autoprefixer": "^10.3.7",
     "chai": "^4.3.4",
     "jsdom": "^17.0.0",

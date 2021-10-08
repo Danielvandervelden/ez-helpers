@@ -1,17 +1,17 @@
 {
-  "name": "@vendor/packagename",
+  "name": "@dan/ezhelpers",
   "version": "0.0.1",
-  "description": "Description of NPM package here.",
-  "main": "build/js/index.js",
+  "description": "Utility functions to make frontend development life easier.",
+  "main": "build/js/index",
   "directories": {
     "lib": "lib"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Danielvandervelden/npm-package-template"
+    "url": "https://github.com/Danielvandervelden/ez-helpers"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register 'tests/**/*.ts'",
+    "test": "env TS_NODE_PROJECT=\"tsconfig.testing.json\" mocha -r ts-node/register 'tests/*.ts'",
     "server": "ln -sf $INIT_CWD/build/ view/ && http-server view/",
     "watch-ts": "rm $INIT_CWD/build/js/*.js && tsc --watch",
     "watch-scss": "sass --watch $INIT_CWD/src/scss/:build/css",
@@ -21,15 +21,18 @@
   "author": "Daniel van der Velden",
   "license": "MIT",
   "dependencies": {
-    "autoprefixer": "^10.3.7",
-    "http-server": "^13.0.2",
-    "postcss-cli": "^9.0.1"
+    "http-server": "^13.0.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.22",
+    "@types/jsdom": "^16.2.13",
     "@types/mocha": "^9.0.0",
+    "@types/node": "^16.10.3",
+    "autoprefixer": "^10.3.7",
     "chai": "^4.3.4",
+    "jsdom": "^17.0.0",
     "mocha": "^9.1.2",
+    "postcss-cli": "^9.0.1",
     "ts-node": "^10.2.1"
   }
 }

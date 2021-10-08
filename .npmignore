@@ -5,3 +5,6 @@ node_modules/
 .vscode/
 view/
 tests/
+.editorconfig
+tsconfig.json
+tsconfig.testing.json

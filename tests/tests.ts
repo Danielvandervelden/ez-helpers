@@ -47,7 +47,6 @@ describe('validating throttle function', () => {
 			}
 		}
 
-
 		function executeFunction() {
 			counter += 1;
 		}

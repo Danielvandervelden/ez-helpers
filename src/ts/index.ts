@@ -142,7 +142,7 @@ export const findNode = (type : "child" | "parent", relativeEl: Element, identif
 
 	/** Function to recursively check the parentNode */
 	function traverseUpDomTree(element : HTMLElement, identifier : string, all : boolean = false) {
-		let returnArray : HTMLElement[] = [];
+		const returnArray : HTMLElement[] = [];
 		let returnElement: HTMLElement | null = null;
 
 		function loop(element: HTMLElement, identifier : string) {

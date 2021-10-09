@@ -125,7 +125,7 @@ export const findNode = (type, relativeEl, identifier, all = false) => {
     }
     /** Function to recursively check the parentNode */
     function traverseUpDomTree(element, identifier, all = false) {
-        let returnArray = [];
+        const returnArray = [];
         let returnElement = null;
         function loop(element, identifier) {
             const parentNode = element.parentNode;

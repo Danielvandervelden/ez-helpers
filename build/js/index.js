@@ -84,26 +84,26 @@ export const addListener = (element, event, callback, config = {
  */
 export const findNode = (type, relativeEl, identifier, all = false) => {
     const validElements = ["a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio", "b", "base", "basefont", "bdi", "bdo", "bgsound", "big", "blink", "blockquote", "body", "br", "button", "canvas", "caption", "center", "cite", "code", "col", "colgroup", "content", "data", "datalist", "dd", "decorator", "del", "details", "dfn", "dir", "div", "dl", "dt", "element", "em", "embed", "fieldset", "figcaption", "figure", "font", "footer", "form", "frame", "frameset", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img", "input", "ins", "isindex", "kbd", "keygen", "label", "legend", "li", "link", "listing", "main", "map", "mark", "marquee", "menu", "menuitem", "meta", "meter", "nav", "nobr", "noframes", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "plaintext", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section", "select", "shadow", "small", "source", "spacer", "span", "strike", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "tt", "u", "ul", "var", "video", "wbr", "xmp"];
-    let typeOfIdentifer = null;
+    let typeOfIdentifier = null;
     if (identifier.match(/^\./)) {
-        typeOfIdentifer = 'class';
+        typeOfIdentifier = 'class';
     }
     else if (identifier.match(/^\[.+?\]/)) {
-        typeOfIdentifer = 'data';
+        typeOfIdentifier = 'data';
     }
     else if (validElements.includes(identifier)) {
-        typeOfIdentifer = 'node';
+        typeOfIdentifier = 'node';
     }
     else if (identifier.match(/^#/)) {
-        typeOfIdentifer = 'id';
+        typeOfIdentifier = 'id';
     }
     if (type !== "child" && type !== "parent") {
         throw new Error(`Type needs to be of type (string) and value "child" or "parent", got (${typeof type}) : ${type} in function findNode()`);
     }
-    if (!(relativeEl instanceof HTMLElement)) {
+    if (!validElements.includes(relativeEl.nodeName.toLowerCase())) {
         throw new Error(`relativeEl needs to be an HTMLElement, got (${typeof relativeEl}) : ${relativeEl}`);
     }
-    if (!typeOfIdentifer) {
+    if (!typeOfIdentifier) {
         throw new Error('identifier needs to be a class (starts with "."), identifier (starts with "#"), an attribute (encapsulated by"[], or a valid DOM node.")');
     }
     if (typeof all !== 'boolean') {
@@ -128,20 +128,20 @@ export const findNode = (type, relativeEl, identifier, all = false) => {
         const returnArray = [];
         let returnElement = null;
         function loop(element, identifier) {
-            const parentNode = element.parentNode;
-            if (typeOfIdentifer === "class" && parentNode.classList.contains(identifier.replace('.', '')) ||
-                typeOfIdentifer === "id" && parentNode.getAttribute('id') === identifier ||
-                typeOfIdentifer === "node" && parentNode.nodeName.toLowerCase() === identifier ||
-                typeOfIdentifer === "data" && parentNode.getAttribute(identifier)) {
+            const parentEl = element.parentNode;
+            if (typeOfIdentifier === "class" && parentEl.classList.contains(identifier.replace('.', '')) ||
+                typeOfIdentifier === "id" && parentEl.getAttribute('id') === identifier.replace('#', '') ||
+                typeOfIdentifier === "node" && parentEl.nodeName.toLowerCase() === identifier ||
+                typeOfIdentifier === "data" && parentEl.getAttribute(identifier.replace(/\[|\]/g, ''))) {
                 if (all) {
-                    returnArray.push(parentNode);
+                    returnArray.push(parentEl);
                 }
                 else {
-                    returnElement = parentNode;
+                    returnElement = parentEl;
                 }
             }
-            if (element.parentNode && element.parentNode !== document.body && all || !returnElement && !all && element.parentNode !== document.body) {
-                loop(parentNode, identifier);
+            if (element.parentNode && element.parentNode.nodeName.toLowerCase() !== 'body' && all || !returnElement && !all && element.parentNode && element.parentNode.nodeName.toLowerCase() !== 'body') {
+                loop(parentEl, identifier);
             }
         }
         loop(element, identifier);

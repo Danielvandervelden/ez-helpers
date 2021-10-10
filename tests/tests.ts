@@ -1,8 +1,7 @@
 import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
 import 'mocha';
-import { finished } from 'stream';
-import { toArray, addListener, throttle, findNode } from '../src/ts/index';
+import { toArray, addListener, throttle, findNode, setObserver } from '../src/ts/index';
 
 describe('validating toArray function', () => {
 	it('should return an array, while passing in a nodelist', () => {

@@ -12,13 +12,14 @@
 		<div class="child parent test">
 			<ul>
 				<li>
+					<span>pest</span>
 					<div data-fok="test" class="child parent">
 						<div class="child parent">
 							<ul>
-								<li>
+								<li><span class="hoer">hoi</span>
 									<div id="child">
-										<div id="hoer" class="test" data-test="test"></div>
-										<div id="test" class="test" data-test="test2"></div>
+										<div id="hoer" class="test" data-test="test">mand</div>
+										<div id="test" class="test" data-test="test2">mand</div>
 									</div>
 								</li>
 							</ul>
@@ -28,6 +29,9 @@
 			</ul>
 		</div>
 	</div>
+
+	<button type="button" id="swap">SWAP</button>
+	<button type="button" id="destroy">DESTROY OBSERVER</button>
 
 	<script type="module" src="script.js" ></script>
 </body>

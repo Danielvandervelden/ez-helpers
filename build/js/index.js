@@ -148,3 +148,15 @@ export const findNode = (type, relativeEl, identifier, all = false) => {
         return all ? returnArray : returnElement;
     }
 };
+/**
+ *
+ * @param target The HTMLElement you want to set an observer on
+ * @param callback The callback you want to execute whenever one of the config values happen
+ * @param config The things you want to watch for (attributes, childList and subtree)
+ * @returns Observer
+ */
+export const setObserver = (target, callback, config = { attributes: true, childList: true, subtree: true }) => {
+    const observer = new MutationObserver(callback);
+    observer.observe(target, config);
+    return observer;
+};

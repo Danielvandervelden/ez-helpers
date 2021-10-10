@@ -1,6 +1,6 @@
 {
   "name": "ez-helpers",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Utility functions to make frontend development life easier.",
   "main": "build/js/index",
   "directories": {
@@ -30,6 +30,6 @@
     "mocha": "^9.1.2",
     "postcss-cli": "^9.0.1",
     "ts-node": "^10.2.1",
-	"http-server": "^13.0.2"
+    "http-server": "^13.0.2"
   }
 }

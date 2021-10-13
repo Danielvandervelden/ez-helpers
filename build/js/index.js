@@ -169,7 +169,7 @@ export const setObserver = (target, callback, config = { attributes: true, child
  * @param target a string, which should be a class (.classname) id (#idname) or data attrute [data-attribute]
  * @param duration how long the scrolling animation should last
  * @param offset the offset from the top you'd like to have when the animation has ended (defaults to 100px).
- * @returns nothing
+ * @returns void
  */
 export const scrollTo = (target, duration, offset) => {
     let el = typeof target == 'object' ? target : document.querySelector(target);

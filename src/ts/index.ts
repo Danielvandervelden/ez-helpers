@@ -29,7 +29,7 @@ export const throttle = (callback : Function, timeFrame : Number) => {
  * @param config Additional config if you need to customize the throttle time between function execution, capture, once, passive or signal option.
  * @returns void
  */
-export const addListener = (element : Element, 
+export const addListener = (element : HTMLElement | string, 
 							event : string, 
 							callback : Function, 
 							config = { 
@@ -46,6 +46,11 @@ export const addListener = (element : Element,
 	"resize", "reset", "scroll", "search", "select", "storage", "submit", "toggle", "touchcancel", "touchend",
 	"touchmove", "touchstart", "transitionend", "unload", "volumechange", "wheel"];
 
+	let targetEl : HTMLElement | null = typeof element == 'object' ? element : document.querySelector(element);
+
+	if(!targetEl) {
+		return new Error("Element does not exist!");
+	}
 
 	/** First validate the events to see if they're legit. */
 	if(event.split(' ').length === 1 && !validEvents.includes(event)) {
@@ -63,12 +68,12 @@ export const addListener = (element : Element,
 	
 	/** Then set the events and throttle them if they're multiple */
 	if(event.split(' ').length === 1) {
-		element.addEventListener(event, callback.bind(null), { capture: config.capture, passive: config.passive, once: config.once })
+		targetEl.addEventListener(event, callback.bind(null), { capture: config.capture, passive: config.passive, once: config.once })
 	} else {
 		const events = event.split(' ');
 
 		for(let i=0;i<events.length;i++) {
-			element.addEventListener(events[i], executeCallback.bind(null), { capture: config.capture, passive: config.passive, once: config.once })
+			targetEl.addEventListener(events[i], executeCallback.bind(null), { capture: config.capture, passive: config.passive, once: config.once })
 		}
 	}
 
@@ -184,4 +189,48 @@ export const setObserver = (target : HTMLElement, callback : MutationCallback, c
 	observer.observe(target, config);
 
 	return observer;
+}
+
+/**
+ * 
+ * @param target a string, which should be a class (.classname) id (#idname) or data attrute [data-attribute]
+ * @param duration how long the scrolling animation should last
+ * @param offset the offset from the top you'd like to have when the animation has ended (defaults to 100px).
+ * @returns nothing
+ */
+export const scrollTo = ( target : string | HTMLElement, duration : number, offset : number ) => {
+	let el = typeof target == 'object' ? target : document.querySelector(target);
+
+	if(!el) {
+		return new Error("Element isn't valid!");
+	}
+
+	let targetPosition : number = el.getBoundingClientRect().top + window.pageYOffset - ( offset || 100 );
+	let startPosition : number = window.pageYOffset;
+	let distance : number = targetPosition - startPosition;
+	let startTime : DOMHighResTimeStamp | null = null;
+
+	const animation = (currentTime : DOMHighResTimeStamp) => {
+		if (startTime === null) {
+			startTime = currentTime;
+		}
+
+		let timeElapsed : DOMHighResTimeStamp = currentTime - startTime;
+		let run = ease(timeElapsed, startPosition, distance, duration);
+		window.scrollTo(0, run);
+		if (timeElapsed < duration) {
+			requestAnimationFrame(animation);
+		}
+	}
+
+	const ease = (t : DOMHighResTimeStamp, b : number, c : number, d : number) => {
+		t /= d / 2;
+		if (t < 1) {
+			return c / 2 * t * t * t + b;
+		}
+		t -= 2;
+		return c / 2 * (t * t * t + 2) + b;
+	};
+
+	requestAnimationFrame(animation);
 }

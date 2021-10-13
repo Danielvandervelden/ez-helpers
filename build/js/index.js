@@ -40,6 +40,10 @@ export const addListener = (element, event, callback, config = {
         "mouseover", "mouseout", "mouseup", "offline", "online", "open", "paste", "pause", "play", "playing", "progress",
         "resize", "reset", "scroll", "search", "select", "storage", "submit", "toggle", "touchcancel", "touchend",
         "touchmove", "touchstart", "transitionend", "unload", "volumechange", "wheel"];
+    let targetEl = typeof element == 'object' ? element : document.querySelector(element);
+    if (!targetEl) {
+        return new Error("Element does not exist!");
+    }
     /** First validate the events to see if they're legit. */
     if (event.split(' ').length === 1 && !validEvents.includes(event)) {
         return new Error(`The event "${event}" you're trying to listen for is currently not supported`);
@@ -54,12 +58,12 @@ export const addListener = (element, event, callback, config = {
     }
     /** Then set the events and throttle them if they're multiple */
     if (event.split(' ').length === 1) {
-        element.addEventListener(event, callback.bind(null), { capture: config.capture, passive: config.passive, once: config.once });
+        targetEl.addEventListener(event, callback.bind(null), { capture: config.capture, passive: config.passive, once: config.once });
     }
     else {
         const events = event.split(' ');
         for (let i = 0; i < events.length; i++) {
-            element.addEventListener(events[i], executeCallback.bind(null), { capture: config.capture, passive: config.passive, once: config.once });
+            targetEl.addEventListener(events[i], executeCallback.bind(null), { capture: config.capture, passive: config.passive, once: config.once });
         }
     }
     /** If we have more than one event firing (for example touchend and click) we don't want the function firing
@@ -159,4 +163,41 @@ export const setObserver = (target, callback, config = { attributes: true, child
     const observer = new MutationObserver(callback);
     observer.observe(target, config);
     return observer;
+};
+/**
+ *
+ * @param target a string, which should be a class (.classname) id (#idname) or data attrute [data-attribute]
+ * @param duration how long the scrolling animation should last
+ * @param offset the offset from the top you'd like to have when the animation has ended (defaults to 100px).
+ * @returns nothing
+ */
+export const scrollTo = (target, duration, offset) => {
+    let el = typeof target == 'object' ? target : document.querySelector(target);
+    if (!el) {
+        return new Error("Element isn't valid!");
+    }
+    let targetPosition = el.getBoundingClientRect().top + window.pageYOffset - (offset || 100);
+    let startPosition = window.pageYOffset;
+    let distance = targetPosition - startPosition;
+    let startTime = null;
+    const animation = (currentTime) => {
+        if (startTime === null) {
+            startTime = currentTime;
+        }
+        let timeElapsed = currentTime - startTime;
+        let run = ease(timeElapsed, startPosition, distance, duration);
+        window.scrollTo(0, run);
+        if (timeElapsed < duration) {
+            requestAnimationFrame(animation);
+        }
+    };
+    const ease = (t, b, c, d) => {
+        t /= d / 2;
+        if (t < 1) {
+            return c / 2 * t * t * t + b;
+        }
+        t -= 2;
+        return c / 2 * (t * t * t + 2) + b;
+    };
+    requestAnimationFrame(animation);
 };
